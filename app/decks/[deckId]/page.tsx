@@ -1,11 +1,15 @@
 import type { Metadata } from 'next'
 import DeckViewPage from '@/components/decks/DeckViewPage'
+import { protectPage } from '@/policy'
 
 export const metadata: Metadata = {
   title: `Study Deck - ${process.env.NEXT_PUBLIC_APP_NAME}`,
   description: 'View and manage your study deck and flashcards',
 }
 
-export default function DeckPage() {
+export default async function DeckPage({ params }: { params: { deckId: string } }) {
+  // Protect this page - redirect to login if not authenticated
+  await protectPage(`/decks/${params.deckId}`)
+
   return <DeckViewPage />
 }

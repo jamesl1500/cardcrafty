@@ -38,11 +38,17 @@ const supabaseServiceRoleKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY
 /**
  * supabase
  * 
- * The Supabase client instance for general use.
+ * The Supabase client instance for general use with proper auth configuration.
  * 
  * @returns {SupabaseClient} The Supabase client
  */
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true
+  }
+});
 
 /** supabaseAdmin
  * 

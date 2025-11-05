@@ -2,13 +2,17 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import LoginForm from '@/components/auth/LoginForm'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { redirectIfAuthenticated } from '@/policy'
 
 export const metadata: Metadata = {
   title: `Sign In - ${process.env.NEXT_PUBLIC_APP_NAME}`,
   description: 'Sign in to your account to access your study materials',
 }
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  // Redirect to dashboard if already authenticated
+  await redirectIfAuthenticated()
+
   return (
     <div className="space-y-6">
       <div className="text-center space-y-2">

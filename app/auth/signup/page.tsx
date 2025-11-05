@@ -3,13 +3,16 @@ import Link from 'next/link'
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import SignupForm from '@/components/auth/SignupForm'
+import { redirectIfAuthenticated } from '@/policy'
 
 export const metadata: Metadata = {
   title: `Sign Up - ${process.env.NEXT_PUBLIC_APP_NAME}`,
   description: 'Create a new account to start your learning journey',
 }
 
-export default function SignupPage() {
+export default async function SignupPage() {
+  // Redirect to dashboard if already authenticated
+  await redirectIfAuthenticated()
   
   return (
     <div className="space-y-6">

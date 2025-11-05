@@ -9,9 +9,17 @@ export class DashboardService {
    * @returns The user object or null if not authenticated
    */
   static async getCurrentUser() {
-    const { data: { user }, error } = await supabase.auth.getUser()
-    if (error) throw error
-    return user
+    try {
+      const { data: { user }, error } = await supabase.auth.getUser()
+      if (error) {
+        console.error('Error getting user:', error)
+        return null
+      }
+      return user
+    } catch (error) {
+      console.error('Failed to get current user:', error)
+      return null
+    }
   }
 
   /**
@@ -21,7 +29,7 @@ export class DashboardService {
    */
   static async getUserDecks(): Promise<Deck[]> {
     const user = await this.getCurrentUser()
-    if (!user) throw new Error('User not authenticated')
+    if (!user) return []
 
     const { data, error } = await supabase
       .from('decks')
@@ -32,7 +40,10 @@ export class DashboardService {
       .eq('user_id', user.id)
       .order('updated_at', { ascending: false })
 
-    if (error) throw error
+    if (error) {
+      console.error('Error fetching user decks:', error)
+      return []
+    }
 
     // Map the response to include flashcard count
     return (data || []).map(deck => ({
@@ -41,23 +52,27 @@ export class DashboardService {
     }))
   }
 
-  /**
+    /**
    * Fetch flashcards that are not attached to any deck
    * 
    * @returns An array of unattached Flashcard objects
    */
   static async getUnattachedFlashcards(): Promise<Flashcard[]> {
     const user = await this.getCurrentUser()
-    if (!user) throw new Error('User not authenticated')
+    if (!user) return []
 
     const { data, error } = await supabase
       .from('flashcards')
       .select('*')
       .eq('user_id', user.id)
       .is('deck_id', null)
-      .order('updated_at', { ascending: false })
+      .order('created_at', { ascending: false })
 
-    if (error) throw error
+    if (error) {
+      console.error('Error fetching unattached flashcards:', error)
+      return []
+    }
+
     return data || []
   }
 
@@ -68,7 +83,18 @@ export class DashboardService {
    */
   static async getDashboardStats() {
     const user = await this.getCurrentUser()
-    if (!user) throw new Error('User not authenticated')
+    if (!user) {
+      return {
+        totalDecks: 0,
+        totalFlashcards: 0,
+        studyStreak: 0,
+        totalStudyTime: 0,
+        averageScore: 0,
+        level: 1,
+        xp: 0,
+        nextLevelXp: 100
+      }
+    }
 
     // Get total decks count
     const { count: totalDecks } = await supabase
@@ -164,7 +190,9 @@ export class DashboardService {
    */
   static async createDeck(deckData: { title: string; description?: string; is_public?: boolean; color?: string }) {
     const user = await this.getCurrentUser()
-    if (!user) throw new Error('User not authenticated')
+    if (!user) {
+      throw new Error('User not authenticated')
+    }
 
     const { data, error } = await supabase
       .from('decks')
@@ -188,7 +216,9 @@ export class DashboardService {
    */
   static async createFlashcard(flashcardData: { front: string; back: string; deck_id?: string }) {
     const user = await this.getCurrentUser()
-    if (!user) throw new Error('User not authenticated')
+    if (!user) {
+      throw new Error('User not authenticated')
+    }
 
     const { data, error } = await supabase
       .from('flashcards')

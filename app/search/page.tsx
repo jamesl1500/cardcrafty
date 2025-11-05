@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import SearchPage from '@/components/search/SearchPage'
+import { protectPage } from '@/policy'
 
 export const metadata = {
   title: `Search - ${process.env.NEXT_PUBLIC_APP_NAME}`,
@@ -10,7 +11,10 @@ function SearchPageWrapper() {
   return <SearchPage />
 }
 
-export default function Search() {
+export default async function Search() {
+  // Protect this page - redirect to login if not authenticated
+  await protectPage('/search')
+
   return (
     <Suspense fallback={
       <div className="container mx-auto py-8 px-4">

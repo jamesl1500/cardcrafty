@@ -49,8 +49,18 @@ export default function LoginForm() {
             } else {
                 setMessage("Signed in successfully");
 
-                // Redirect to dashboard
-                router.push("/dashboard");
+                // Small delay to ensure session is properly set
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                // Refresh the router to update server components with new session
+                router.refresh();
+                
+                // Check for redirect parameter in URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const redirectTo = urlParams.get('redirectTo') || '/dashboard';
+                
+                // Redirect to intended destination
+                window.location.href = redirectTo;
             }
         } catch {
             setMessage("An error occurred while signing in");
