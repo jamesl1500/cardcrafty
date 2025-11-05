@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import SearchPage from '@/components/search/SearchPage'
 
 export const metadata = {
@@ -5,6 +6,23 @@ export const metadata = {
   description: 'Search through your decks and flashcards',
 }
 
-export default function Search() {
+function SearchPageWrapper() {
   return <SearchPage />
+}
+
+export default function Search() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto py-8 px-4">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading search...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <SearchPageWrapper />
+    </Suspense>
+  )
 }

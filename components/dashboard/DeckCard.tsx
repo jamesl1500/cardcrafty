@@ -3,8 +3,7 @@
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { BookOpen, Users, Lock, Play } from 'lucide-react'
+import { Users, Lock } from 'lucide-react'
 import type { Deck } from '@/lib/types'
 
 interface DeckCardProps {

@@ -8,31 +8,40 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { 
+import {
   Calendar,
-  MapPin,
+  Clock,
+  Edit2,
+  Eye,
+  Gift,
   Globe,
-  BookOpen,
+  MapPin,
+  Share2,
   Star,
   Trophy,
   TrendingUp,
+  Users,
+  User,
+  ArrowRight,
+  Award,
+  CheckCircle,
+  BarChart3,
+  PlusCircle,
+  Target,
+  Icon,
+  LucideIcon,
   Settings,
   Share,
-  Target,
-  Clock,
-  Award,
-  Zap,
-  BarChart3,
   Twitter,
   Facebook,
   Linkedin,
-  Icon,
-  Link as LIcon
+  BookOpen,
+  Zap
 } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
 import { DeckService } from '@/lib/deck-service'
 import { DashboardService } from '@/lib/dashboard-service'
 import type { Deck, Flashcard } from '@/lib/types'
+import type { User as SupabaseUser } from '@supabase/supabase-js'
 
 /**
  * ProfileStats
@@ -64,28 +73,7 @@ interface Achievement {
   rarity: 'common' | 'rare' | 'epic' | 'legendary'
 }
 
-/**
- * User
- * 
- * Represents a user object with metadata.
- */
-interface User {
-  user: {
-    id: string
-    email: string | null
-    user_metadata: {
-      first_name?: string
-      last_name?: string
-      avatar_url?: string
-      bio?: string
-      location?: string
-      website?: string
-    }
-  }
-  created_at: string
-}
-
-export default function Profile({ user }: { user: User | null }) {
+export default function Profile({ user }: { user: SupabaseUser | null }) {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [userDecks, setUserDecks] = useState<Deck[]>([])
@@ -102,6 +90,24 @@ export default function Profile({ user }: { user: User | null }) {
   })
   const [achievements, setAchievements] = useState<Achievement[]>([])
 
+  // Helper function to get user ID from either user type
+  const getUserId = (user: SupabaseUser | null) => {
+    if (!user) return null
+    return user.id
+  }
+
+  // Helper function to get user metadata from either user type
+  const getUserMetadata = (user: SupabaseUser | null) => {
+    if (!user) return {}
+    return user.user_metadata
+  }
+
+  // Helper function to get user email from either user type  
+  const getUserEmail = (user: SupabaseUser | null) => {
+    if (!user) return null
+    return user.email
+  }
+
   useEffect(() => {
     const loadProfileData = async () => {
       try {
@@ -113,7 +119,10 @@ export default function Profile({ user }: { user: User | null }) {
         }
 
         // Load user's decks
-        const decks = await DeckService.getUserDecks(user.user.id)
+        const userId = getUserId(user)
+        if (!userId) return
+        
+        const decks = await DeckService.getUserDecks(userId)
         setUserDecks(decks)
 
         // Load dashboard data for recent flashcards
@@ -201,13 +210,15 @@ export default function Profile({ user }: { user: User | null }) {
   const [shareModalOpen, setShareModalOpen] = useState(false)
 
   const copyProfileLink = () => {
-    const profileUrl = `${process.env.NEXT_PUBLIC_APP_URL}/profile/${user?.user.id}`
+    const userId = getUserId(user)
+    const profileUrl = `${process.env.NEXT_PUBLIC_APP_URL}/profile/${userId}`
     navigator.clipboard.writeText(profileUrl)
     alert('Profile link copied to clipboard!')
   }
 
   const shareToSocial = (platform: 'twitter' | 'facebook' | 'linkedin') => {
-    const profileUrl = `${process.env.NEXT_PUBLIC_APP_URL}/profile/${user?.user.id}`
+    const userId = getUserId(user)
+    const profileUrl = `${process.env.NEXT_PUBLIC_APP_URL}/profile/${userId}`
     let shareUrl = ''
 
     switch (platform) {
@@ -240,8 +251,9 @@ export default function Profile({ user }: { user: User | null }) {
     return null
   }
 
-  const userMetadata = user.user.user_metadata || {}
-  const displayName = userMetadata.first_name && userMetadata.last_name ? `${userMetadata.first_name} ${userMetadata.last_name}` : user.user.email?.split('@')[0] || 'User'
+  const userMetadata = getUserMetadata(user) || {}
+  const userEmail = getUserEmail(user)
+  const displayName = userMetadata.first_name && userMetadata.last_name ? `${userMetadata.first_name} ${userMetadata.last_name}` : userEmail?.split('@')[0] || 'User'
   const bio = userMetadata.bio || "Passionate learner exploring new topics every day!"
   const location = userMetadata.location || ''
   const website = userMetadata.website || ''
@@ -336,7 +348,7 @@ export default function Profile({ user }: { user: User | null }) {
                     onClick={copyProfileLink}
                     >
                     <div className="w-6 h-6 mr-1 p-1 bg-gray-400 rounded">
-                      <LIcon className="h-2 w-2 text-white" />
+                      <Linkedin className="h-2 w-2 text-white" />
                     </div>
                     Copy Link
                     </Button>

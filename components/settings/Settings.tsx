@@ -286,12 +286,18 @@ export default function Settings() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Settings</h1>
-        <p className="text-muted-foreground mt-2">
-          Manage your account settings and preferences
-        </p>
-      </div>
+      {loading ? (
+        <div className="flex items-center justify-center py-8">
+          <div className="text-muted-foreground">Loading settings...</div>
+        </div>
+      ) : (
+        <>
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold">Settings</h1>
+            <p className="text-muted-foreground mt-2">
+              Manage your account settings and preferences
+            </p>
+          </div>
 
       {message && (
         <Alert className="mb-6">
@@ -660,6 +666,8 @@ export default function Settings() {
           </Card>
         </TabsContent>
       </Tabs>
+        </>
+      )}
     </div>
   )
 }

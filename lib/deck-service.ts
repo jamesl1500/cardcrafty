@@ -117,8 +117,6 @@ export class DeckService {
    * @returns A promise that resolves to an array of Flashcard objects
    */
   static async getDeckFlashcards(deckId: string): Promise<Flashcard[]> {
-    const user = await this.getCurrentUser()
-
     // First check if the deck exists and is accessible
     const deck = await this.getDeckById(deckId)
     if (!deck) return []

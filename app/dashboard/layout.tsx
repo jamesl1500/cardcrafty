@@ -1,8 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { BookOpen, Home, Settings, LogOut } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: `Dashboard - ${process.env.NEXT_PUBLIC_APP_NAME}`,

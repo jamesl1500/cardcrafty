@@ -26,5 +26,5 @@ export async function getUserById(id: string) {
         throw new Error(`Failed to fetch user: ${error.message}`);
     }
 
-    return user;
+    return user.user;
 }

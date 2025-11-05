@@ -13,8 +13,6 @@ import Link from 'next/link'
 import { 
   Mail, 
   MessageSquare, 
-  Phone, 
-  MapPin, 
   Clock,
   Send,
   CheckCircle,

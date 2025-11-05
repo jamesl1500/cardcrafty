@@ -12,8 +12,7 @@ import {
   Server,
   Users,
   ArrowLeft,
-  CheckCircle,
-  AlertTriangle
+  CheckCircle
 } from 'lucide-react'
 
 export default function PrivacyPolicyPage() {

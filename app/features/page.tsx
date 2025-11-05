@@ -8,7 +8,6 @@ import {
   BarChart3, 
   Search, 
   Zap, 
-  Users,
   Shield,
   Smartphone,
   Cloud,
@@ -16,11 +15,8 @@ import {
   CheckCircle,
   ArrowRight,
   Star,
-  Clock,
   TrendingUp,
-  Palette,
-  Globe,
-  Download
+  Globe
 } from 'lucide-react'
 
 export default function FeaturesPage() {

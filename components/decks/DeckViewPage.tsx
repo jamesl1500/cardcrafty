@@ -53,7 +53,6 @@ export default function DeckViewPage() {
   // Search states
   const [searchQuery, setSearchQuery] = useState('')
   const [isAddingCardLoading, setIsAddingCardLoading] = useState(false)
-  const [isImporting, setIsImporting] = useState(false)
   
   // Flashcard flip states
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set())
@@ -238,20 +237,13 @@ export default function DeckViewPage() {
     })
   }
 
-  const importFlashcards = async (isStarredOnly: boolean) => {
+  const loadFlashcards = async (isStarredOnly: boolean = false) => {
     try {
-      setIsImporting(true)
-      const importedCards = await DeckService.importFlashcards(deckId, isStarredOnly)
-      setFlashcards(prev => [...importedCards, ...prev])
-      
-      // Update deck flashcard count
-      if (deck) {
-        setDeck(prev => prev ? { ...prev, flashcard_count: (prev.flashcard_count || 0) + importedCards.length } : null)
-      }
+      const allCards = await DeckService.getDeckFlashcards(deckId)
+      const filteredCards = isStarredOnly ? allCards.filter(card => card.is_starred) : allCards
+      setFlashcards(filteredCards)
     } catch (err) {
-      console.error('Error importing flashcards:', err)
-    } finally {
-      setIsImporting(false)
+      console.error('Error loading flashcards:', err)
     }
   }
 
@@ -341,7 +333,6 @@ export default function DeckViewPage() {
                   <div className="space-y-2">
                     <Label htmlFor="edit-privacy">Privacy</Label>
                     <Select
-                      id="edit-privacy"
                       value={editData.is_public ? 'true' : 'false'}
                       onValueChange={(value) => setEditData(prev => ({ ...prev, is_public: value === 'true' }))}
                     >
@@ -396,9 +387,9 @@ export default function DeckViewPage() {
                     <Edit className="h-4 w-4 mr-2" />
                     Edit Deck
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => importFlashcards(true)}>
+                  <DropdownMenuItem onClick={() => loadFlashcards(false)}>
                     <Import className="h-4 w-4 mr-2" />
-                    Import Flashcards
+                    Reload Flashcards
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleDeleteDeck} className="text-red-600">
