@@ -1,13 +1,78 @@
 /**
- * Route Protection Policies
+ * Route Protection Proxy (Next.js 16)
  * 
- * This file contains helper functions and configurations for route protection
+ * This file contains the main proxy function and helper functions for route protection
  * and access control throughout the application.
  */
 
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { NextRequest, NextResponse } from 'next/server'
+
+/**
+ * Main proxy function - runs for every request (Next.js 16)
+ */
+export default async function proxy(request: NextRequest) {
+  const response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            request.cookies.set(name, value)
+            response.cookies.set(name, value, options)
+          })
+        },
+      },
+    }
+  )
+
+  // Get the current user session
+  const { data: { session } } = await supabase.auth.getSession()
+  
+  const { pathname } = request.nextUrl
+
+  // Redirect authenticated users away from auth pages
+  if (session && isAuthRoute(pathname)) {
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = '/dashboard'
+    return NextResponse.redirect(redirectUrl)
+  }
+
+  // Protect authenticated routes
+  if (!session && isProtectedRoute(pathname)) {
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = '/auth/login'
+    redirectUrl.searchParams.set('redirectTo', pathname)
+    return NextResponse.redirect(redirectUrl)
+  }
+
+  return response
+}
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     */
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
+}
 
 /**
  * Route access levels
@@ -55,16 +120,27 @@ export async function getServerSession() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options)
+            })
+          } catch {
+            // The `setAll` method was called from a Server Component.
+            // This can be ignored if you have middleware refreshing
+            // user sessions.
+          }
         },
       },
     }
   )
 
   try {
-    const { data: { session }, error } = await supabase.auth.getSession();
-    console.log('getServerSession session:', session);
+    const { data: { session }, error } = await supabase.auth.getSession()
+    console.log('getServerSession session:', session)
     
     if (error) {
       console.error('Session error:', error)

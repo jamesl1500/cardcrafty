@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import CreateDeckForm from '@/components/decks/CreateDeckForm'
-import { protectPage } from '@/policy'
+import { protectPage } from '@/proxy'
 
 export const metadata: Metadata = {
   title: `Create New Deck - ${process.env.NEXT_PUBLIC_APP_NAME}`,

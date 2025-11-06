@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import SearchPage from '@/components/search/SearchPage'
-import { protectPage } from '@/policy'
+import { protectPage } from '@/proxy'
 
 export const metadata = {
   title: `Search - ${process.env.NEXT_PUBLIC_APP_NAME}`,

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Dashboard from '@/components/dashboard/Dashboard'
-import { protectPage } from '@/policy'
+import { protectPage } from '@/proxy'
 
 export const metadata: Metadata = {
   title: `Dashboard - ${process.env.NEXT_PUBLIC_APP_NAME}`,

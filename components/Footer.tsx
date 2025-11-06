@@ -2,6 +2,7 @@
 
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BookOpen, Mail, Github, Twitter } from "lucide-react";
 import type { User } from '@supabase/supabase-js'
@@ -9,6 +10,11 @@ import type { User } from '@supabase/supabase-js'
 export default function Footer() {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+
+// Get the current path to conditionally render footer
+  const pathname = usePathname();
+
+  const isAuthPage = pathname.startsWith('/auth');
 
   useEffect(() => {
     const getSession = async () => {
@@ -28,6 +34,11 @@ export default function Footer() {
     return () => subscription.unsubscribe()
   }, [])
 
+// Don't render footer on authentication pages
+  if (pathname.startsWith('/auth')) {
+    return null;
+  }
+
   if (isLoading) {
     return <div className="w-full border-t mt-8 py-4 text-center text-sm text-gray-500">Loading...</div>
   }
@@ -45,14 +56,11 @@ export default function Footer() {
               Your knowledge vault for mastering any subject.
             </p>
             <div className="flex items-center gap-4">
-              <a href="mailto:hello@studyvault.com" className="text-muted-foreground hover:text-foreground">
+              <a href="mailto:hello@cardcrafty.com" className="text-muted-foreground hover:text-foreground">
                 <Mail className="h-5 w-5" />
               </a>
-              <a href="https://github.com" className="text-muted-foreground hover:text-foreground">
+              <a href="https://github.com/jamesl1500/cardcrafty" className="text-muted-foreground hover:text-foreground">
                 <Github className="h-5 w-5" />
-              </a>
-              <a href="https://twitter.com" className="text-muted-foreground hover:text-foreground">
-                <Twitter className="h-5 w-5" />
               </a>
             </div>
           </div>

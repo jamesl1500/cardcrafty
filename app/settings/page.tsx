@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Settings from '@/components/settings/Settings'
-import { protectPage } from '@/policy'
+import { protectPage } from '@/proxy'
 
 export const metadata: Metadata = {
   title: `Settings - ${process.env.NEXT_PUBLIC_APP_NAME}`,

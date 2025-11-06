@@ -12,43 +12,35 @@
  * @module lib/supabase
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js'
+import { createBrowserClient } from '@supabase/ssr'
 
 /**
  * supabaseUrl
  * 
  * The URL of the Supabase project, retrieved from environment variables.
  */
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-
-/**
- * supabaseAnonKey
- * 
- * The anonymous key for accessing the Supabase project, retrieved from environment variables.
- */
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 
 /**
  * supabaseServiceRoleKey
  * 
  * The service role key for admin access to the Supabase project, retrieved from environment variables.
  */
-const supabaseServiceRoleKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY as string;
+const supabaseServiceRoleKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY!
 
 /**
  * supabase
  * 
- * The Supabase client instance for general use with proper auth configuration.
+ * The Supabase client instance for browser use with cookie-based authentication.
+ * This ensures compatibility with server-side authentication checks.
  * 
  * @returns {SupabaseClient} The Supabase client
  */
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: true
-  }
-});
+export const supabase = createBrowserClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
 
 /** supabaseAdmin
  * 
@@ -56,4 +48,4 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
  * 
  * @returns {SupabaseClient} The Supabase client with admin privileges
  */
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey);
+export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey)

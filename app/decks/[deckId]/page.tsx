@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import DeckViewPage from '@/components/decks/DeckViewPage'
-import { protectPage } from '@/policy'
+import { protectPage } from '@/proxy'
 
 export const metadata: Metadata = {
   title: `Study Deck - ${process.env.NEXT_PUBLIC_APP_NAME}`,

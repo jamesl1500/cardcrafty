@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import DecksListPage from '@/components/decks/DecksListPage'
-import { protectPage } from '@/policy'
+import { protectPage } from '@/proxy'
 
 export const metadata: Metadata = {
   title: `My Decks - ${process.env.NEXT_PUBLIC_APP_NAME}`,

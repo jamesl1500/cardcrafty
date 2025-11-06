@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import SignupForm from '@/components/auth/SignupForm'
-import { redirectIfAuthenticated } from '@/policy'
+import { redirectIfAuthenticated } from '@/proxy'
 
 export const metadata: Metadata = {
   title: `Sign Up - ${process.env.NEXT_PUBLIC_APP_NAME}`,

@@ -253,8 +253,8 @@ class SearchService {
     const searchTerm = query.toLowerCase()
 
     for (const flashcard of flashcards || []) {
-      const termMatch = flashcard.term.toLowerCase().includes(searchTerm)
-      const definitionMatch = flashcard.definition.toLowerCase().includes(searchTerm)
+      const termMatch = flashcard.front.toLowerCase().includes(searchTerm)
+      const definitionMatch = flashcard.back.toLowerCase().includes(searchTerm)
 
       if (termMatch || definitionMatch) {
         // Calculate relevance score

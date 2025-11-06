@@ -51,7 +51,7 @@ export default function AuthLayout({
               </div>
               <div>
                 <div className="text-3xl font-bold">500K+</div>
-                <div className="text-sm opacity-80">Teachers</div>
+                <div className="text-sm opacity-80">Flashcards</div>
               </div>
               <div>
                 <div className="text-3xl font-bold">50M+</div>

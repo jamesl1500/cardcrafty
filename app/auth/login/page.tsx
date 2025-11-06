@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import LoginForm from '@/components/auth/LoginForm'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { redirectIfAuthenticated } from '@/policy'
+import { redirectIfAuthenticated } from '@/proxy'
 
 export const metadata: Metadata = {
   title: `Sign In - ${process.env.NEXT_PUBLIC_APP_NAME}`,
