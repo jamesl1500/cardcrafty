@@ -1,4 +1,4 @@
-# 🎓 StudyCards - Modern Flashcard Learning Platform
+# 🎓 CardCrafty - Modern Flashcard Learning Platform
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.0.1-black)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.0-blue)](https://reactjs.org/)
@@ -10,7 +10,7 @@
 
 ## 🚀 Live Demo
 
-[**View Live Application**](https://your-app-url.vercel.app) | [**API Documentation**](https://your-app-url.vercel.app/api-docs)
+[**View Live Application**](https://cardcrafty.com)
 
 ## ✨ Features
 
@@ -58,25 +58,6 @@
 - **TypeScript** - Static type checking
 - **Next.js Proxy** - Route protection and middleware
 - **SASS** - Enhanced CSS preprocessing
-
-## 🏗️ Architecture
-
-```
-├── app/                    # Next.js App Router
-│   ├── auth/              # Authentication pages
-│   ├── dashboard/         # User dashboard
-│   ├── decks/            # Deck management
-│   └── layout.tsx        # Root layout
-├── components/           # Reusable React components
-│   ├── ui/              # UI component library
-│   └── auth/            # Auth-specific components
-├── lib/                 # Utilities and configurations
-│   ├── supabase.ts     # Supabase client setup
-│   ├── auth.ts         # Authentication helpers
-│   └── utils.ts        # Shared utilities
-├── proxy.ts            # Next.js 16 route protection
-└── styles/             # Global styles and themes
-```
 
 ## 🚀 Quick Start
 
