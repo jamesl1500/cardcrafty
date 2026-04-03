@@ -11,12 +11,14 @@ import StatsCards from './StatsCards'
 import DeckCard from './DeckCard'
 import FlashcardItem from './FlashcardItem'
 import { DashboardService } from '@/lib/dashboard-service'
+import { StarService } from '@/lib/star-service'
 import type { DashboardData } from '@/lib/types'
 
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [starredFlashcardIds, setStarredFlashcardIds] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     loadDashboardData()
@@ -28,6 +30,10 @@ export default function Dashboard() {
       setError(null)
       const data = await DashboardService.getDashboardData()
       setDashboardData(data)
+      
+      // Load starred flashcard IDs
+      const starredIds = await StarService.getStarredFlashcardIds()
+      setStarredFlashcardIds(new Set(starredIds))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load dashboard')
     } finally {
@@ -36,14 +42,29 @@ export default function Dashboard() {
   }
 
   const handleToggleFlashcardStar = async (flashcardId: string, isStarred: boolean) => {
-    // TODO: Implement star toggle functionality
-    console.log('Toggle star for flashcard:', flashcardId, isStarred)
+    try {
+      const newStarredState = await StarService.toggleFlashcardStar(flashcardId, isStarred)
+      
+      // Update the local state
+      const newStarredSet = new Set(starredFlashcardIds)
+      if (newStarredState) {
+        newStarredSet.add(flashcardId)
+      } else {
+        newStarredSet.delete(flashcardId)
+      }
+      setStarredFlashcardIds(newStarredSet)
+    } catch (err) {
+      console.error('Failed to toggle star:', err)
+    }
   }
 
   const handleMoveFlashcardToDecks = async (flashcardId: string) => {
     // TODO: Implement move to decks functionality
     console.log('Move flashcard to decks:', flashcardId)
   }
+
+  // Helper to check if a flashcard is starred
+  const isFlashcardStarred = (flashcardId: string) => starredFlashcardIds.has(flashcardId)
 
   if (loading) {
     return (
@@ -164,6 +185,7 @@ export default function Dashboard() {
                 <FlashcardItem
                   key={flashcard.id}
                   flashcard={flashcard}
+                  isStarred={isFlashcardStarred(flashcard.id)}
                   onToggleStar={handleToggleFlashcardStar}
                   onMoveToDecks={handleMoveFlashcardToDecks}
                 />

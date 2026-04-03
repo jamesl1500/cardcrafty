@@ -9,11 +9,12 @@ import type { Flashcard } from '@/lib/types'
 
 interface FlashcardItemProps {
   flashcard: Flashcard
+  isStarred?: boolean
   onToggleStar?: (id: string, isStarred: boolean) => void
   onMoveToDecks?: (id: string) => void
 }
 
-export default function FlashcardItem({ flashcard, onToggleStar, onMoveToDecks }: FlashcardItemProps) {
+export default function FlashcardItem({ flashcard, isStarred = false, onToggleStar, onMoveToDecks }: FlashcardItemProps) {
   const [isFlipped, setIsFlipped] = useState(false)
 
   const formatDate = (dateString: string) => {
@@ -25,7 +26,7 @@ export default function FlashcardItem({ flashcard, onToggleStar, onMoveToDecks }
 
   const handleToggleStar = (e: React.MouseEvent) => {
     e.stopPropagation()
-    onToggleStar?.(flashcard.id, !flashcard.is_starred)
+    onToggleStar?.(flashcard.id, isStarred)
   }
 
   const handleMoveToDecks = (e: React.MouseEvent) => {
@@ -63,7 +64,7 @@ export default function FlashcardItem({ flashcard, onToggleStar, onMoveToDecks }
               onClick={handleToggleStar}
               className="h-6 w-6 p-0"
             >
-              {flashcard.is_starred ? (
+              {isStarred ? (
                 <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
               ) : (
                 <StarIcon className="h-3 w-3" />

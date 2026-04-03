@@ -50,7 +50,7 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <BookOpen className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold">StudyVault</span>
+              <span className="text-xl font-bold">CardCrafty</span>
             </div>
             <p className="text-sm text-muted-foreground">
               Your knowledge vault for mastering any subject.
@@ -139,7 +139,7 @@ export default function Footer() {
         <div className="border-t pt-6 mt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} StudyVault Inc. All rights reserved.
+              &copy; {new Date().getFullYear()} CardCrafty Inc. All rights reserved.
             </p>
             <p className="text-sm text-muted-foreground">
               Made with ❤️ for learners everywhere
