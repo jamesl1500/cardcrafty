@@ -73,7 +73,7 @@ export default function AuthLayout({
           <div className="mt-8">
             <footer className="w-full border-t mt-8 py-4 text-center text-sm text-gray-500">
               &copy; {new Date().getFullYear()} {process.env.NEXT_PUBLIC_APP_NAME}. All rights reserved.
-              <p>Made with ❤️ by <Link href="https://jameslatten.com">James Latten</Link></p>
+              <p>Designed and Built by <Link href="https://lattentechnologies.com" className="hover:text-foreground">Latten Technologies LLC</Link></p>
             </footer>
           </div>
         </div>

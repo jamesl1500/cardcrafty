@@ -142,7 +142,7 @@ export default function Footer() {
               &copy; {new Date().getFullYear()} CardCrafty Inc. All rights reserved.
             </p>
             <p className="text-sm text-muted-foreground">
-              Made with ❤️ for learners everywhere
+              Designed and Buillt by <Link href="https://lattentechnologies.com" className="hover:text-foreground">Latten Technologies LLC</Link>
             </p>
           </div>
         </div>
